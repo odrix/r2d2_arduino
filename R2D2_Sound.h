@@ -35,9 +35,7 @@ class R2D2_Sound
     void sound16();
     void sound17();
     void sound18();
-    void setDebug(boolean debug);
   private:
-    boolean _debug;
     int _spkPin;
     void beep(int pin, unsigned int note, unsigned long duration);
 };

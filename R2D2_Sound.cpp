@@ -203,8 +203,3 @@ void R2D2_Sound::sound18() {
     beep(_spkPin, i*150, 10);
   }
 }
-
-void R2D2_Sound::setDebug(boolean debug)
-{
-  _debug = debug;
-}

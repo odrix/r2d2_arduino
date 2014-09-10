@@ -32,6 +32,8 @@ void StepMotor::init() {
 //delay "motorSpeed" between each pin setting (to determine speed)
 void StepMotor::anticlockwise(int degree)
 {
+  Serial.print("step <-- ");
+  Serial.println(degree);
   int maxRotate = degree;
   for(int j = 0; j < maxRotate; j++) {
     for(int i = 0; i < 8; i++)
@@ -44,6 +46,8 @@ void StepMotor::anticlockwise(int degree)
 
 void StepMotor::clockwise(int degree)
 {
+  Serial.print("step --> ");
+  Serial.println(degree);
   int maxRotate = degree;
   for(int j = 0; j < maxRotate; j++) {
     for(int i = 7; i >= 0; i--)
@@ -60,9 +64,4 @@ void StepMotor::setOutput(int out)
   digitalWrite(motorPin2, bitRead(lookup[out], 1));
   digitalWrite(motorPin3, bitRead(lookup[out], 2));
   digitalWrite(motorPin4, bitRead(lookup[out], 3));
-}
-
-void StepMotor::setDebug(boolean debug)
-{
-  _debug = debug;
 }

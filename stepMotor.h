@@ -18,10 +18,7 @@ class StepMotor
     void init();
     void anticlockwise(int degree);
     void clockwise(int degree);
-    void setDebug(boolean debug);
-  private:
-    boolean _debug;
-    
+  private:    
     int motorPin1;    // Blue   - 28BYJ48 pin 1
     int motorPin2;    // Pink   - 28BYJ48 pin 2
     int motorPin3;    // Yellow - 28BYJ48 pin 3
