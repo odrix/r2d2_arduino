@@ -16,12 +16,11 @@ class MicroDetect
     MicroDetect(int microPin, int diffLevel);
     void init();
     void detect(funcDetect func);
-    void setDebug(boolean debug);
   private:
-    boolean _debug;
     int _microPin;
     int _level, _lmini, _lmaxi;
     int _leveldiff;
+    int _linit;
 };
 
 #endif
