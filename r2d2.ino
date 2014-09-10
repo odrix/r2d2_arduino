@@ -5,17 +5,30 @@
 #include "microDetect.h"
 
 int speakerPin = 8;
-int ledPin = 5;
+int ledPin = 6;
 
 //int ledVert = 6;
-int ledBleu = 6;
+int ledBleu = 5;
 //int ledJaune = 4;
 //int ledRouge = 3;
 int pause = 0;
 
+boolean secondInit = false;
+
 R2D2_Sound bouche(speakerPin);
 StepMotor tete(9, 10, 11, 12);
 MicroDetect oreille(A1, 7);
+
+void clignote (int led, int duree, int quantite)
+{
+  for(int i=0;i<quantite;i++)
+  {
+    digitalWrite(led, HIGH);
+    delay(duree);
+    digitalWrite(led, LOW);
+    delay(duree);
+  }
+}
 
 void allume(int led, int duree)
 {
@@ -54,44 +67,58 @@ void ledRand()
 
 void parle()
 {
+  Serial.println("<parle>");
   bouche.ohhh();
   tete.clockwise(70);ledRandForce();
   tete.anticlockwise(100);ledRandForce();
   tete.clockwise(30);ledRandForce();
+  Serial.println("</parle>");
+}
+
+void activeLog()
+{
+   Serial.begin(9600);
 }
 
 
 void setup() {
   randomSeed(analogRead(0));
+  activeLog();
+  
   tete.init();
   oreille.init();
   bouche.sound3();
 }
 
-void loop() {
-  tete.clockwise(40);ledRand();
-  tete.anticlockwise(130);ledRand();
-  
-  tete.clockwise(60);ledRand();
-  tete.anticlockwise(30);ledRand();
-  
-  tete.clockwise(100);ledRand();
-  tete.anticlockwise(30);ledRand();
+int seq[2][12] = {{40, -130, 60, -30, 100, -30, 70, -50, 20, -90, 55, -15},
+{-150, 100, -80, 30, -40, 80, -100, 30, -60, 160, -90, 120}};
 
-  oreille.detect(parle);  
-  pause = random(150, 400);
-  delay(pause);
-  
-  tete.clockwise(70);ledRand();
-  tete.anticlockwise(50);ledRand();
-  
-  tete.clockwise(12);ledRand();
-  tete.anticlockwise(90);ledRand();
-  
-  tete.clockwise(55);ledRand();
-  tete.anticlockwise(15);ledRand();
- 
-  oreille.detect(parle);   
-  pause = random(150, 400);
-  delay(pause);
+void loop() {
+  for(int j=0;j<2;j++) {
+    Serial.print("sequence ");
+    Serial.println(j);
+    for(int i=0;i<12;i++) {
+      if(seq[j][i] > 0){
+        tete.clockwise(seq[j][i]);
+      } else {
+        tete.anticlockwise(-1 * seq[j][i]);
+      }
+      ledRand();
+      oreille.detect(parle);
+      
+      /*if(!secondInit && i == 6) {
+        oreille.init();
+        secondInit = true;   
+      }
+      else if(secondInit)
+      {
+        oreille.detect(parle);
+      } */
+    }
+      
+    Serial.println("sequence fini");
+    pause = random(100, 400);
+    clignote(ledPin, pause, random(2, 6));
+  }
 }
+
